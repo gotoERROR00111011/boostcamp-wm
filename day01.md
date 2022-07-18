@@ -23,6 +23,53 @@ stack overflow survey 2021 (54943 응답) 에서 1위 tool 으로 선정되었�
 
 참고로 git과 github는 다른 것이다. github는 git을 사용한 서비스라고 보는것이 정확하다. github 에서 제공하는 다양한 기능들(일정 관리, 질의응답, ...)은 git 의 기능이 아니다. 마이크로소프트의 힘이다!
 
+### Git의 내부
+
+key : value 구조다.
+
+#### Blob 개체
+
+`hash-object` 명령은 데이터(value)를 저장, 해당 데이터에 접근할 key를 반환한다.
+(key는 40자 체크섬 해시)
+
+`.git/objects`에 해당 key 이름으로 파일이 생성된다.
+
+```bash
+git hash-object -w test.txt
+```
+
+`cat-file` 명령으로 해당 key의 value를 확인 가능하다.
+
+```bash
+git cat-file -p d2a4cbf60df98ddfaaea1facf3ce68f66ef7e566
+```
+
+이것이 blob 개체이다.
+
+#### Tree 개체
+
+tree 개체는 여러개의 blob, tree 개체를 가진다.
+
+`update-index` 명령은 파일을 staging area 에 추가한다.
+
+`read-tree` 명령은 tree 개체를 staging area에 추가한다.
+
+`write-tree` 명령은 staging area 를 tree 개체에 저장한다.
+
+```bash
+git write-tree
+```
+
+#### Commit 개체
+
+`commit-tree` 명령은 사용자, 날짜, 메세지를 저장한다.
+
+#### add, commit
+
+결과적으로 add, commit 은 다음과 같은 과정들을 거친다.
+
+blob 개체, tree 개체, commit 개체를 거쳐 완성된다.
+
 ## JavaScript, node.js
 
 ### var, let, const
@@ -48,4 +95,6 @@ undefined 만 남게되기 때문이다.
 ## 참고
 
 -   [Stack Overflow Survey 2021](https://insights.stackoverflow.com/survey/2021)
+-   [git 내부](https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4)
+-   [github git](https://github.com/git/git)
 -   [동기 비동기](https://opentutorials.org/course/3332/21132)
